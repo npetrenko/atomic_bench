@@ -6,6 +6,7 @@ set(CMAKE_CXX_STANDARD 17)
 
 find_package(benchmark REQUIRED)
 
-add_executable(bench src/bench.cpp src/copy_shared.cpp)
-target_include_directories(bench PUBLIC src)
-target_link_libraries(bench benchmark pthread)
+include(cmake/AddBench.cmake)
+
+add_subdirectory(atomic_bench)
+add_subdirectory(copy_or_ref_bench)

@@ -1,0 +1,12 @@
+*~
+build/
+release/
+debug/
+tsan/
+asan/
+msan/
+relwithdebinfo/
+compile_commands.json
+.ccls-cache
+.#*
+*.so
