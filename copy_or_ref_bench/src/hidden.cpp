@@ -10,9 +10,11 @@ uint64_t ByRef(const T& val) {
     return val.Sum();
 }
 
+template uint64_t ByValue<Skinny>(Skinny);
 template uint64_t ByValue<Fat>(Fat);
 template uint64_t ByValue<VeryFat>(VeryFat);
 
+template uint64_t ByRef<Skinny>(const Skinny&);
 template uint64_t ByRef<Fat>(const Fat&);
 template uint64_t ByRef<VeryFat>(const VeryFat&);
 

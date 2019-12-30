@@ -2,6 +2,14 @@
 
 #include <stdint.h>
 
+struct Skinny {
+    uint64_t a;
+
+    auto Sum() const {
+        return a;
+    }
+};
+
 struct Fat {
     uint64_t a, b;
 

@@ -30,6 +30,9 @@ void RunBenchmark(benchmark::State& state) {
     }
 }
 
+BENCHMARK_TEMPLATE(RunBenchmark, Skinny, ByValueExecutor);
+BENCHMARK_TEMPLATE(RunBenchmark, Skinny, ByRefExecutor);
+
 BENCHMARK_TEMPLATE(RunBenchmark, Fat, ByValueExecutor);
 BENCHMARK_TEMPLATE(RunBenchmark, Fat, ByRefExecutor);
 
