@@ -18,7 +18,7 @@ struct UnionVariant {
     explicit UnionVariant(float fval) noexcept
         : is_float(true)
     {
-        new(&f_value) int(fval);
+        new(&f_value) float(fval);
     }
 
     template <class Visitor>
