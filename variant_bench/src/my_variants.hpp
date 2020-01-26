@@ -22,6 +22,7 @@ struct UnionVariant {
     }
 
     template <class Visitor>
+    // __attribute__((noinline))
     void Accept(Visitor&& visitor) {
         if (is_float) {
             visitor(f_value);
@@ -49,6 +50,7 @@ struct SimpleVariant {
     }
 
     template <class Visitor>
+    // __attribute__((noinline))
     void Accept(Visitor&& visitor) {
         if (is_float) {
             visitor(f_value);
@@ -72,6 +74,7 @@ struct StlVariant : private std::variant<float, int> {
     }
 
     template <class Visitor>
+    // __attribute__((noinline))
     void Accept(Visitor&& visitor) {
         std::visit(std::forward<Visitor>(visitor), static_cast<TBase&>(*this));
     }
