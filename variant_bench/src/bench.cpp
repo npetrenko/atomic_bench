@@ -16,19 +16,24 @@ void RunBenchmark(benchmark::State& state) {
     };
 
     size_t num_ints = 0;
+    size_t num_floats = 0;
+
     struct {
         size_t* const num_ints;
+        size_t* const num_floats;
 
         void operator()(int) {
             ++(*num_ints);
         }
         void operator()(float) {
+            ++(*num_floats);
         }
-    } visitor{&num_ints};
+    } visitor{&num_ints, &num_floats};
     
     while (state.KeepRunning()) {
         vec[pos].Accept(visitor);
         benchmark::DoNotOptimize(num_ints);
+        benchmark::DoNotOptimize(num_floats);
         update_pos();
     }
 }
