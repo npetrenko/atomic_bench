@@ -13,7 +13,7 @@ void Increment(size_t *val) {
 
 void Bind(benchmark::State &state) {
     size_t counter = 0;
-    const auto binded = std::bind(Increment, &counter);
+    const std::function<void()> binded = std::bind(Increment, &counter);
 
     while (state.KeepRunning()) {
         binded();
@@ -23,7 +23,7 @@ void Bind(benchmark::State &state) {
 
 void Function(benchmark::State &state) {
     size_t counter = 0;
-    const auto callback = std::function<void()>{[&counter] { ++counter; }};
+    const std::function<void()> callback = std::function<void()>{[&counter] { ++counter; }};
 
     while (state.KeepRunning()) {
         callback();
