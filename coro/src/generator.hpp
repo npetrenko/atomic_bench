@@ -26,6 +26,12 @@ public:
 
     Generator(Generator&&) = default;
 
+    ~Generator() {
+        if (handle_) {
+            handle_.destroy();
+        }
+    }
+
     std::optional<T> Next() {
         if (!handle_) {
             return std::nullopt;
@@ -44,7 +50,6 @@ public:
 
 private:
     void DoDestroy() {
-        assert(handle_);
         handle_.destroy();
         handle_ = Handle{};
     }
