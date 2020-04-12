@@ -22,8 +22,13 @@ public:
     {
     }
 
-    Generator(Generator&&) = default;
-    Generator& operator=(Generator&&) = default;
+    Generator(Generator&& other) {
+        handle_ = other.handle_;
+        storage_ = other.storage_;
+        other.handle_ = nullptr;
+    }
+
+    Generator& operator=(Generator&&) = delete;
 
     ~Generator() {
         if (handle_) {
