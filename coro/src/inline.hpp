@@ -6,7 +6,7 @@
 #include <vector>
 
 class InlineSequence {
- public:
+public:
     Generator<int> Iterate(int first, int last) {
         for (int i = first; i != last; ++i) {
             co_yield i;
@@ -14,9 +14,8 @@ class InlineSequence {
     }
 };
 
-
 class InlineIRange {
- public:
+public:
     using iterator = std::vector<int>::const_iterator;
     using irange = std::pair<iterator, iterator>;
 
@@ -28,8 +27,21 @@ class InlineIRange {
         return {storage_.begin(), storage_.end()};
     }
 
- private:
+private:
     std::vector<int> storage_;
+};
+
+class InlineSequenceOverRange {
+public:
+    Generator<int> Iterate(int first, int last) {
+        auto r = range_.Iterate(first, last);
+        for (auto it = r.first; it != r.second; ++it) {
+            co_yield* it;
+        }
+    }
+
+private:
+    InlineIRange range_;
 };
 
 template <class Iterator>
