@@ -15,8 +15,8 @@ public:
     {
     }
 
-    Defer(Defer&&) = default;
-    Defer& operator=(const Defer&) = delete;
+    Defer(Defer&&) = delete;
+    Defer& operator=(const Defer&&) = delete;
 
     ~Defer() {
         Func_();
