@@ -15,7 +15,7 @@ include(cmake/AddBench.cmake)
 
 add_subdirectory(contrib)
 
-add_subdirectory(atomic_bench)
+# add_subdirectory(atomic_bench) #does not work with libc++
 add_subdirectory(copy_or_ref_bench)
 add_subdirectory(variant_bench)
 add_subdirectory(functional_bench)
