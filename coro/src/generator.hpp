@@ -12,19 +12,20 @@ class YieldPromise;
 
 template <class T>
 class Generator {
-    using Storage = std::optional<T>;
+    using Storage = T*;
     using Handle = coroutine_handle<>;
 
 public:
     using promise_type = YieldPromise<T>;
     
-    explicit Generator(Storage* storage, Handle handle)
+    explicit Generator(Storage storage, Handle handle)
         : storage_(storage)
         , handle_(std::move(handle))
     {
     }
 
     Generator(Generator&&) = default;
+    Generator& operator=(Generator&&) = default;
 
     ~Generator() {
         if (handle_) {
@@ -32,20 +33,18 @@ public:
         }
     }
 
-    std::optional<T> Next() {
+    T* Next() {
         if (!handle_) {
-            return std::nullopt;
+            return nullptr;
         }
         handle_();
         auto defer_cleanup = Defer([&]() noexcept {
             if (handle_.done()) {
                 DoDestroy();
-            } else {
-                storage_->reset();
             }
         });
 
-        return std::move(*storage_);
+        return storage_;
     }
 
 private:
@@ -54,13 +53,47 @@ private:
         handle_ = Handle{};
     }
 
-    Storage* storage_;
-    Handle handle_;
+    Storage storage_{};
+    Handle handle_{};
 };
 
 template <class T>
 class YieldPromise {
-    using Storage = std::optional<T>;
+    struct Storage {
+    public:
+        T* get() {
+            return &Value_;
+        }
+
+        Storage() = default;
+        Storage(Storage&&) = delete;
+        Storage& operator=(Storage&&) = delete;
+
+        template <class S>
+        void emplace(S&& val) noexcept(std::is_nothrow_constructible_v<T,S&&>) {
+            Destroy();
+            new (&Value_) T(std::forward<S>(val));
+            isEmpty_ = false;
+        }
+
+        ~Storage() {
+            Destroy();
+        }
+        
+    private:
+        void Destroy() {
+            if (!isEmpty_) {
+                Value_.~T();
+            }
+            isEmpty_ = true;
+        }
+
+        bool isEmpty_ = true;
+        union {
+            T Value_;
+        };
+    };
+
     using Handle = coroutine_handle<YieldPromise<T>>;
 
 public:
@@ -77,7 +110,7 @@ public:
     }
 
     Generator<T> get_return_object() {
-        return Generator<T>{&storage_, Handle::from_promise(*this)};
+        return Generator<T>{storage_.get(), Handle::from_promise(*this)};
     }
 
     template <class S>
@@ -95,5 +128,6 @@ private:
         storage_.emplace(std::forward<S>(value));
     }
 
+    bool empty_ = true;
     Storage storage_;
 };
