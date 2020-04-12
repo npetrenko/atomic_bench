@@ -64,6 +64,7 @@ class YieldPromise {
         }
 
         Storage() = default;
+
         Storage(Storage&&) = delete;
         Storage& operator=(Storage&&) = delete;
 
