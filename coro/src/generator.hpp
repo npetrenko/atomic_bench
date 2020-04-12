@@ -1,7 +1,5 @@
 #pragma once
 
-#include "defer.hpp"
-
 #include <experimental/coroutine>
 #include <optional>
 
@@ -34,15 +32,10 @@ public:
     }
 
     T* Next() {
-        if (!handle_) {
+        handle_();
+        if (handle_.done()) {
             return nullptr;
         }
-        handle_();
-        auto defer_cleanup = Defer([&]() noexcept {
-            if (handle_.done()) {
-                DoDestroy();
-            }
-        });
 
         return storage_;
     }

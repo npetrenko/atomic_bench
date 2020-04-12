@@ -13,6 +13,11 @@ void RunBenchmark(benchmark::State& state) {
         auto r = range.Iterate(first, last);
         benchmark::DoNotOptimize(ReduceSum(std::move(r)));
     }
+
+    auto test = ReduceSum(range.Iterate(1, 5));
+    if (test != 10) {
+        std::terminate();
+    }
 }
 
 BENCHMARK_TEMPLATE(RunBenchmark, InlineSequence)->Range(4, 2<<10);
