@@ -1,19 +1,23 @@
 #!/bin/bash
 
-BENCH_NAME=${1%/}
-START_DIR=`pwd`
+SOURCE_PATH=$(readlink -f $(dirname $0))
+echo $SOURCE_PATH
+
+BENCH_NAME=$(basename $1)
+
+STORE_DIR="/tmp"
 
 run_compiler() {
-    rm -rf release
-    mkdir release
-    cd release && \
-        cmake -DCMAKE_BUILD_TYPE=RELEASE -DCMAKE_CXX_COMPILER=$1 .. && \
-        cd $BENCH_NAME &&
-        make && ./$BENCH_NAME
+    compiler=$1
+    target_dir="${STORE_DIR}/release_${compiler}"
 
-    cd $START_DIR
-    rm -rf release
+    mkdir $target_dir || true
+    (cd $target_dir && \
+        cmake -DCMAKE_BUILD_TYPE=RELEASE -DCMAKE_CXX_COMPILER=$compiler $SOURCE_PATH && \
+        cd $BENCH_NAME && \
+        make -j && \
+        ./$BENCH_NAME)
 }
 
-run_compiler g++
+# run_compiler g++
 run_compiler clang++
