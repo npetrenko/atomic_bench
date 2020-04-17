@@ -7,9 +7,9 @@ template <class Range>
 void RunBenchmark(benchmark::State& state) {
     Range range;
     int first = 1;
-    int last = state.range(0);
 
     while (state.KeepRunning()) {
+        int last = state.range(0);
         auto r = range.Iterate(first, last);
         benchmark::DoNotOptimize(ReduceSum(std::move(r)));
     }
