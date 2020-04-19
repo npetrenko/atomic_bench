@@ -2,10 +2,13 @@
 
 #include <vector>
 #include <utility>
+#include <deque>
+#include <list>
 
 class NonErasedInline {
+    using container = std::vector<int>;
 public:
-    using iterator = std::vector<int>::const_iterator;
+    using iterator = container::const_iterator;
     using irange = std::pair<iterator, iterator>;
 
     irange CreateRange(int last) {
@@ -17,7 +20,7 @@ public:
     }
 
 private:
-    std::vector<int> values_;
+    container values_;
 };
 
 template <template <class> class Iterator>

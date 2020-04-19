@@ -1,4 +1,5 @@
 #include "v1.hpp"
+#include "v2.hpp"
 #include "inline.hpp"
 #include "noinline.hpp"
 
@@ -17,7 +18,9 @@ void RunReduceSum(benchmark::State& state) {
 
 BENCHMARK_TEMPLATE(RunReduceSum, NonErasedInline)->Range(4, 2 << 10);
 BENCHMARK_TEMPLATE(RunReduceSum, ErasedInline<v1::VFIterator>)->Range(4, 2 << 10);
+BENCHMARK_TEMPLATE(RunReduceSum, ErasedInline<v2::VFIterator>)->Range(4, 2 << 10);
 BENCHMARK_TEMPLATE(RunReduceSum, NonErased)->Range(4, 2 << 10);
 BENCHMARK_TEMPLATE(RunReduceSum, Erased<v1::VFIterator>)->Range(4, 2 << 10);
+BENCHMARK_TEMPLATE(RunReduceSum, Erased<v2::VFIterator>)->Range(4, 2 << 10);
 
 BENCHMARK_MAIN();

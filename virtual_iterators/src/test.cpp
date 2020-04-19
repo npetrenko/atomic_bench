@@ -1,11 +1,13 @@
 #include "v1.hpp"
+#include "v2.hpp"
 
 #include <gtest/gtest.h>
 
-TEST(Basic, First) {
+template <template <class> class Iterator>
+void BasicFirst() {
     std::vector<int> values{1,2,3};
-    v1::VFIterator<int> begin{values.begin()};
-    v1::VFIterator<int> end{values.end()};
+    Iterator<int> begin{values.begin()};
+    Iterator<int> end{values.end()};
 
     ASSERT_NE(begin, end);
     ASSERT_EQ(*begin, 1);
@@ -20,4 +22,12 @@ TEST(Basic, First) {
 
     ++begin;
     ASSERT_EQ(begin, end);
+}
+
+TEST(Basic, v1) {
+    BasicFirst<v1::VFIterator>();
+}
+
+TEST(Basic, v2) {
+    BasicFirst<v2::VFIterator>();
 }
