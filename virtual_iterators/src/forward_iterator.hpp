@@ -168,7 +168,7 @@ private:
                 }
 
                 case OpCode::Dynamic:
-                    std::terminate();
+                    break;
             }
             std::terminate();
         }
