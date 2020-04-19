@@ -202,7 +202,7 @@ private:
     ImplFunc impl_;
 };
 
-template <class T, class Dispatcher = CompressedDispatcher>
+template <class T, class Dispatcher = InlineDispatcher>
 class Manager {
 public:
     template <class Iterator>

@@ -14,3 +14,4 @@ public:
     using irange = typename Base::irange;
     irange CreateRange(int last);
 };
+

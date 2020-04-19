@@ -2,6 +2,10 @@
 #include "v1.hpp"
 #include "v2.hpp"
 
+int Identity(int value) {
+    return value;
+}
+
 NonErased::irange NonErased::CreateRange(int last) {
     return NonErasedInline::CreateRange(last);
 }

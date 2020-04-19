@@ -1,5 +1,7 @@
 #pragma once
 
+#include "common.hpp"
+
 #include <vector>
 #include <utility>
 #include <deque>
@@ -42,7 +44,7 @@ template <class Iterator>
 int ReduceSum(std::pair<Iterator, Iterator> range) {
     int result = 0;
     for (auto it = range.first; it != range.second; ++it) {
-        result += *it;
+        result += benchmarks::common::Identity(*it);
     }
     return result;
 }
