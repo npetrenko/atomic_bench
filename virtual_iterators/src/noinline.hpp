@@ -7,7 +7,10 @@ public:
     irange CreateRange(int last);
 };
 
-class Erased : ErasedInline {
+template <template <class> class Iterator>
+class Erased : ErasedInline<Iterator> {
+    using Base = ErasedInline<Iterator>;
 public:
+    using irange = typename Base::irange;
     irange CreateRange(int last);
 };

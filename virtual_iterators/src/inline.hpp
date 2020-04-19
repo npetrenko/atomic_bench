@@ -1,7 +1,5 @@
 #pragma once
 
-#include "forward_iterator.hpp"
-
 #include <vector>
 #include <utility>
 
@@ -22,9 +20,10 @@ private:
     std::vector<int> values_;
 };
 
+template <template <class> class Iterator>
 class ErasedInline {
 public:
-    using iterator = VFIterator<const int>;
+    using iterator = Iterator<const int>;
     using irange = std::pair<iterator, iterator>;
 
     irange CreateRange(int last) {

@@ -4,6 +4,8 @@
 #include <cassert>
 #include <cstdint>
 
+namespace v1 {
+
 template <class T, class From>
 T* AssertAnyCast(From* data) {
     auto* t = std::any_cast<T>(data);
@@ -19,17 +21,13 @@ public:
 
     template <class Iterator>
     explicit VFIterator(Iterator iter)
-        : obj_{iter}
-        , manager_{AbstractManager::template CreateManager<Iterator>()}
-    {
+        : obj_{iter}, manager_{AbstractManager::template CreateManager<Iterator>()} {
     }
 
     VFIterator(VFIterator&&) noexcept = default;
     VFIterator& operator=(VFIterator&&) noexcept = default;
 
-    VFIterator(const VFIterator& other)
-        : manager_{other.manager_}
-    {
+    VFIterator(const VFIterator& other) : manager_{other.manager_} {
         obj_ = manager_.Clone(other.obj_);
     }
 
@@ -103,16 +101,14 @@ private:
                 Manage<Iterator, OpCode::Dynamic>,
             };
         }
-        __attribute__((always_inline))
-        void Increment(std::any& iterator) const {
+        __attribute__((always_inline)) void Increment(std::any& iterator) const {
             this->inc_func_(OpCode::Increment, iterator, nullptr);
         }
 
-        __attribute__((always_inline))
-        bool Equal(const std::any& first, const std::any& second) const {
-            return this->iseq_func_(OpCode::IsEqual,
-                            const_cast<std::any&>(first),
-                            const_cast<std::any*>(&second));
+        __attribute__((always_inline)) bool Equal(const std::any& first,
+                                                  const std::any& second) const {
+            return this->iseq_func_(OpCode::IsEqual, const_cast<std::any&>(first),
+                                    const_cast<std::any*>(&second));
         }
 
         std::any Clone(const std::any& iterator) const {
@@ -121,9 +117,9 @@ private:
             return result;
         }
 
-        __attribute__((always_inline))
-        reference Deref(const std::any& iterator) const {
-            uint64_t addr = this->deref_func_(OpCode::Deref, const_cast<std::any&>(iterator), nullptr);
+        __attribute__((always_inline)) reference Deref(const std::any& iterator) const {
+            uint64_t addr =
+                this->deref_func_(OpCode::Deref, const_cast<std::any&>(iterator), nullptr);
             auto* ptr = reinterpret_cast<pointer>(addr);
             return *ptr;
         }
@@ -135,9 +131,7 @@ private:
 
     private:
         template <class... Args>
-        explicit AbstractManager(Args&&... args) noexcept
-            : Base{std::forward<Args>(args)...}
-        {
+        explicit AbstractManager(Args&&... args) noexcept : Base{std::forward<Args>(args)...} {
         }
 
         template <class Iterator, OpCode ccode = OpCode::Dynamic>
@@ -158,7 +152,8 @@ private:
                     return 2;
                 }
                 case OpCode::IsEqual: {
-                    auto* other = AssertAnyCast<const Iterator>(static_cast<IsEqualPayload*>(payload));
+                    auto* other =
+                        AssertAnyCast<const Iterator>(static_cast<IsEqualPayload*>(payload));
                     return (*other) == (*iter);
                 }
                 case OpCode::Clone: {
@@ -172,9 +167,12 @@ private:
             }
             std::terminate();
         }
+
     private:
     };
 
     std::any obj_;
     AbstractManager manager_;
 };
+
+}  // namespace v1
