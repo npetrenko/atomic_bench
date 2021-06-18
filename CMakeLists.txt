@@ -21,9 +21,10 @@ add_subdirectory(contrib)
 
 # add_subdirectory(atomic_bench) #does not work with libc++
 add_subdirectory(copy_or_ref_bench)
-add_subdirectory(variant_bench)
+add_subdirectory(coro)
+add_subdirectory(format)
 add_subdirectory(functional_bench)
 add_subdirectory(functional_bench_hidden)
-add_subdirectory(coro)
-add_subdirectory(virtual_iterators)
 add_subdirectory(strings)
+add_subdirectory(variant_bench)
+add_subdirectory(virtual_iterators)
