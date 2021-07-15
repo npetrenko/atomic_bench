@@ -1,6 +1,7 @@
 #include <benchmark/benchmark.h>
 
 #include <fmt/core.h>
+#include <fmt/compile.h>
 
 #include <string_view>
 #include <utility>
@@ -16,6 +17,10 @@ std::string joinSstream(std::string_view left, std::string_view right) {
 
 std::string joinFormat(std::string_view left, std::string_view right) {
     return fmt::format("{}, {}", left, right);
+}
+
+std::string joinFormatCompile(std::string_view left, std::string_view right) {
+    return fmt::format(FMT_COMPILE("{}, {}"), left, right);
 }
 
 std::string incorrectJoinPlusLeft(std::string_view left, std::string_view right) {
@@ -60,6 +65,7 @@ void RunBenchmark(benchmark::State& state) {
 
 BENCHMARK_TEMPLATE(RunBenchmark, joinSstream);
 BENCHMARK_TEMPLATE(RunBenchmark, joinFormat);
+BENCHMARK_TEMPLATE(RunBenchmark, joinFormatCompile);
 BENCHMARK_TEMPLATE(RunBenchmark, joinFast);
 
 BENCHMARK_TEMPLATE(RunBenchmark, incorrectJoinPlusLeft);
