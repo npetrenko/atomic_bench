@@ -30,12 +30,15 @@ std::string joinFast(std::string_view left, std::string_view right) {
     std::string res;
     res.resize(left.size() + right.size() + 2);
 
-    std::copy(left.begin(), left.end(), res.begin());
+    auto last = std::copy(left.begin(), left.end(), res.begin());
 
-    res.push_back(',');
-    res.push_back(' ');
+    *last = ',';
+    ++last;
 
-    std::copy(right.begin(), right.end(), res.begin());
+    *last = ' ';
+    ++last;
+
+    std::copy(right.begin(), right.end(), last);
     return res;
 }
 
